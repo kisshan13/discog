@@ -1,6 +1,10 @@
 package discog
 
-import "github.com/bwmarrin/discordgo"
+import (
+	"errors"
+
+	"github.com/bwmarrin/discordgo"
+)
 
 // Represents callback ctx for Slash Command Handlers
 type Ctx struct {
@@ -78,4 +82,23 @@ func (c *Ctx) FlagEphemeral() *Ctx {
 func (c *Ctx) FlagReply(flag discordgo.MessageFlags) *Ctx {
 	c.interactionResponse.Data.Flags = flag
 	return c
+}
+
+// Adds the components to the interaction response.
+func (c *Ctx) SetComponents(actionRows interface{}) (*Ctx, error) {
+	messageComponent, ok := actionRows.([]discordgo.MessageComponent)
+
+	if !ok {
+		return nil, errors.New("Must be ActionRow")
+	}
+	if c.interactionResponse.Data.Components != nil {
+		c.interactionResponse.Data.Components = append(c.interactionResponse.Data.Components, messageComponent...)
+		println(c.interactionResponse.Data.Components)
+		return c, nil
+	}
+
+	c.interactionResponse.Data.Components = []discordgo.MessageComponent{}
+	c.interactionResponse.Data.Components = append(c.interactionResponse.Data.Components, messageComponent...)
+	println(c.interactionResponse.Data.Components)
+	return c, nil
 }

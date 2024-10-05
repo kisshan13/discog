@@ -21,20 +21,6 @@ func main() {
 		log.Printf("Bot has connected to Discord as %s (%s)\n", r.User.Username, r.User.ID)
 	})
 
-	bot.Session.AddHandler(func(s *discordgo.Session, e *discordgo.MessageCreate) {
-		if e.Author.ID != s.State.User.ID {
-			guild, err := s.Guild(e.GuildID)
-
-			if err != nil {
-				println(err.Error())
-			}
-
-			println(guild.ID)
-
-			s.ChannelMessageSend(e.ChannelID, "Kya re lund ke")
-		}
-	})
-
 	bot.Run(func(session *discordgo.Session, err error) {
 		if err != nil {
 			panic(err)

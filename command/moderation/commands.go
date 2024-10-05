@@ -12,8 +12,20 @@ func GetKickCommand() *discog.SlashCommand {
 	})
 
 	command.SetHandler(func(ctx *discog.Ctx) {
+
+		actionRow := discog.NewActionRow()
+
+		button := discog.NewButton().AddContent("", "Hello", "https://kisshan.xyz", false).AddStyle(discordgo.LinkButton)
+
+		actionRow.AddComponent(button.GetComponent())
+
 		ctx.Content("I can't kick you have to add functionality first")
-		ctx.Send()
+		ctx.SetComponents([]discordgo.MessageComponent{actionRow.GetActionRow()})
+		err := ctx.Send()
+
+		if err != nil {
+			println(err.Error())
+		}
 	})
 
 	return command
