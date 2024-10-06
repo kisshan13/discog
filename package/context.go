@@ -86,19 +86,22 @@ func (c *Ctx) FlagReply(flag discordgo.MessageFlags) *Ctx {
 
 // Adds the components to the interaction response.
 func (c *Ctx) SetComponents(actionRows interface{}) (*Ctx, error) {
-	messageComponent, ok := actionRows.([]discordgo.MessageComponent)
+	messageComponent, ok := actionRows.(discordgo.ActionsRow)
 
 	if !ok {
 		return nil, errors.New("Must be ActionRow")
 	}
-	if c.interactionResponse.Data.Components != nil {
-		c.interactionResponse.Data.Components = append(c.interactionResponse.Data.Components, messageComponent...)
-		println(c.interactionResponse.Data.Components)
-		return c, nil
+
+	c.interactionResponse.Data.Components = []discordgo.MessageComponent{
+		messageComponent,
 	}
 
-	c.interactionResponse.Data.Components = []discordgo.MessageComponent{}
-	c.interactionResponse.Data.Components = append(c.interactionResponse.Data.Components, messageComponent...)
-	println(c.interactionResponse.Data.Components)
+	// if c.interactionResponse.Data.Components != nil {
+	// 	c.interactionResponse.Data.Components = append(c.interactionResponse.Data.Components, messageComponent...)
+	// 	return c, nil
+	// }
+
+	// c.interactionResponse.Data.Components = []discordgo.MessageComponent{}
+	// c.interactionResponse.Data.Components = append(c.interactionResponse.Data.Components, messageComponent...)
 	return c, nil
 }

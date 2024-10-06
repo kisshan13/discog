@@ -39,6 +39,6 @@ func (b *Button) AnyEmoji(emoji Emoji) *Button {
 }
 
 // Returns the Button Component
-func (b *Button) GetComponent() discordgo.Button {
+func (b *Button) GetComponent() interface{} {
 	return b.button
 }

@@ -17,8 +17,15 @@ func NewSelectMenu(menuType discordgo.SelectMenuType) *SelectMenu {
 	return &SelectMenu{
 		selectMenu: discordgo.SelectMenu{
 			MenuType: menuType,
+			Disabled: false,
 		},
 	}
+}
+
+// Adds an ID to the select menu.
+func (sm *SelectMenu) AddID(id string) *SelectMenu {
+	sm.selectMenu.CustomID = id
+	return sm
 }
 
 // Adds placeholder to select menu
@@ -43,7 +50,6 @@ func (sm *SelectMenu) AddDefaultValue(id string, valueType discordgo.SelectMenuD
 				Type: valueType,
 			},
 		}
-
 		return sm
 	}
 
@@ -53,6 +59,34 @@ func (sm *SelectMenu) AddDefaultValue(id string, valueType discordgo.SelectMenuD
 	})
 
 	return sm
+}
+
+// Add channel types to Select Menu.
+func (sm *SelectMenu) AddChannelTypes(channelTypes []discordgo.ChannelType) *SelectMenu {
+	sm.selectMenu.ChannelTypes = channelTypes
+
+	return sm
+}
+
+// Adds options to the select menu
+func (sm *SelectMenu) AddOptions(options []SelectMenuOption) *SelectMenu {
+	for _, option := range options {
+		if len(sm.selectMenu.Options) == 0 {
+			sm.selectMenu.Options = []discordgo.SelectMenuOption{
+				option.option,
+			}
+			continue
+		}
+
+		sm.selectMenu.Options = append(sm.selectMenu.Options, option.option)
+	}
+
+	return sm
+}
+
+// returns the SelectMenu component.
+func (sm *SelectMenu) GetComponent() interface{} {
+	return sm.selectMenu
 }
 
 // Creates a new SelectMenuOption
@@ -76,6 +110,9 @@ func (sm *SelectMenuOption) AnyEmoji(emoji *Emoji) *SelectMenuOption {
 // Mark the option as default selected for the SelectMenu
 func (sm *SelectMenuOption) Default() *SelectMenuOption {
 	sm.option.Default = true
-
 	return sm
+}
+
+func (sm *SelectMenuOption) GetComponent() discordgo.SelectMenuOption {
+	return sm.option
 }
