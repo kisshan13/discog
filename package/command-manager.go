@@ -2,7 +2,9 @@ package discog
 
 // Represents a root command manager for the bot. It holds all the information needed to create & execute commands.
 type CommandManager struct {
-	groups []*CommandGroup
+	groups                  []*CommandGroup
+	modalHandler            func(c *Ctx)
+	messageComponentHandler func(c *Ctx)
 }
 
 // Creates a new instance of CommandManager.
@@ -13,6 +15,14 @@ func NewCommandManager() *CommandManager {
 // Adds a command group to the command manager.
 func (cm *CommandManager) AddGroup(group *CommandGroup) {
 	cm.groups = append(cm.groups, group)
+}
+
+func (cm *CommandManager) AddModalInteractionHandler(handler func(c *Ctx)) {
+	cm.modalHandler = handler
+}
+
+func (cm *CommandManager) AddMessageComponentInteractionHandler(handler func(c *Ctx)) {
+	cm.messageComponentHandler = handler
 }
 
 // Finds a command by its name. Returns the handler function if found, nil otherwise.

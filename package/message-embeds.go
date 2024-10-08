@@ -98,8 +98,8 @@ func (m *MessageEmbed) SetFields(fields []*discordgo.MessageEmbedField) *Message
 }
 
 // Returns the discordgo.MessageEmbed struct
-func (m *MessageEmbed) GetComponent() interface{} {
-	return m.embed
+func (m *MessageEmbed) GetComponent() *discordgo.MessageEmbed {
+	return &m.embed
 }
 
 // Returns the MessageEmbedAuthor struct

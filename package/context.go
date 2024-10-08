@@ -60,12 +60,6 @@ func (c *Ctx) SetTTS() *Ctx {
 	return c
 }
 
-// Adds an Embed to the interaction response.
-func (c *Ctx) SetEmbed(embed *discordgo.MessageEmbed) *Ctx {
-	c.interactionResponse.Data.Embeds = append(c.interactionResponse.Data.Embeds, embed)
-	return c
-}
-
 // Adds Files to the interaction response.
 func (c *Ctx) SetFiles(files []*discordgo.File) *Ctx {
 	c.interactionResponse.Data.Files = append(c.interactionResponse.Data.Files, files...)
@@ -98,4 +92,9 @@ func (c *Ctx) SetComponents(actionRows []Component) (*Ctx, error) {
 		c.interactionResponse.Data.Components = append(c.interactionResponse.Data.Components, messageComponent)
 	}
 	return c, nil
+}
+
+// Sets message embeds to the interaction response.
+func (c *Ctx) SetMessageEmbeds(embeds []*discordgo.MessageEmbed) {
+	c.interactionResponse.Data.Embeds = embeds
 }

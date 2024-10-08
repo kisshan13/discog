@@ -57,6 +57,18 @@ func (b *Bot) OnReady(callback func(r *discordgo.Ready)) {
 	if len(b.CommandManager.groups) != 0 {
 		b.Session.AddHandler(func(s *discordgo.Session, i *discordgo.InteractionCreate) {
 
+			if i.Interaction.Type == discordgo.InteractionModalSubmit {
+				ctx := newCtx(s, i)
+				b.CommandManager.modalHandler(ctx)
+				return
+			}
+
+			if i.Interaction.Type == discordgo.InteractionMessageComponent {
+				ctx := newCtx(s, i)
+				b.CommandManager.messageComponentHandler(ctx)
+				return
+			}
+
 			handler := b.CommandManager.FindCommand(i.ApplicationCommandData().Name)
 
 			if handler != nil {
