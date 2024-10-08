@@ -30,8 +30,14 @@ func (c *Ctx) Send() error {
 	return c.Session.InteractionRespond(c.Interaction.Interaction, c.interactionResponse)
 }
 
+// Sets the title for the response.
+func (c *Ctx) SetTitle(title string) *Ctx {
+	c.interactionResponse.Data.Title = title
+	return c
+}
+
 // Sets the Interaction response type .
-func (c *Ctx) ResponseType(responseType discordgo.InteractionResponseType) *Ctx {
+func (c *Ctx) SetResponseType(responseType discordgo.InteractionResponseType) *Ctx {
 	c.interactionResponse.Type = responseType
 	return c
 }
@@ -43,31 +49,25 @@ func (c *Ctx) SetCustomID(id string) *Ctx {
 }
 
 // Sets the content of the interaction response.
-func (c *Ctx) Content(content string) *Ctx {
+func (c *Ctx) SetContent(content string) *Ctx {
 	c.interactionResponse.Data.Content = content
 	return c
 }
 
 // Sets the Text-To-Speech as true
-func (c *Ctx) TTS() *Ctx {
+func (c *Ctx) SetTTS() *Ctx {
 	c.interactionResponse.Data.TTS = true
 	return c
 }
 
-// Adds Message Components to the interaction response.
-func (c *Ctx) AddMessageComponents(components []discordgo.MessageComponent) *Ctx {
-	c.interactionResponse.Data.Components = append(c.interactionResponse.Data.Components, components...)
-	return c
-}
-
 // Adds an Embed to the interaction response.
-func (c *Ctx) AddEmbed(embed *discordgo.MessageEmbed) *Ctx {
+func (c *Ctx) SetEmbed(embed *discordgo.MessageEmbed) *Ctx {
 	c.interactionResponse.Data.Embeds = append(c.interactionResponse.Data.Embeds, embed)
 	return c
 }
 
 // Adds Files to the interaction response.
-func (c *Ctx) AddFiles(files []*discordgo.File) *Ctx {
+func (c *Ctx) SetFiles(files []*discordgo.File) *Ctx {
 	c.interactionResponse.Data.Files = append(c.interactionResponse.Data.Files, files...)
 	return c
 }
@@ -85,23 +85,17 @@ func (c *Ctx) FlagReply(flag discordgo.MessageFlags) *Ctx {
 }
 
 // Adds the components to the interaction response.
-func (c *Ctx) SetComponents(actionRows interface{}) (*Ctx, error) {
-	messageComponent, ok := actionRows.(discordgo.ActionsRow)
+func (c *Ctx) SetComponents(actionRows []Component) (*Ctx, error) {
+	c.interactionResponse.Data.Components = []discordgo.MessageComponent{}
 
-	if !ok {
-		return nil, errors.New("Must be ActionRow")
+	for _, row := range actionRows {
+		messageComponent, ok := row.GetComponent().(discordgo.ActionsRow)
+
+		if !ok {
+			return nil, errors.New("Must be ActionRow")
+		}
+
+		c.interactionResponse.Data.Components = append(c.interactionResponse.Data.Components, messageComponent)
 	}
-
-	c.interactionResponse.Data.Components = []discordgo.MessageComponent{
-		messageComponent,
-	}
-
-	// if c.interactionResponse.Data.Components != nil {
-	// 	c.interactionResponse.Data.Components = append(c.interactionResponse.Data.Components, messageComponent...)
-	// 	return c, nil
-	// }
-
-	// c.interactionResponse.Data.Components = []discordgo.MessageComponent{}
-	// c.interactionResponse.Data.Components = append(c.interactionResponse.Data.Components, messageComponent...)
 	return c, nil
 }

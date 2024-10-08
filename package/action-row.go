@@ -36,7 +36,7 @@ func (r *ActionRow) AddComponent(component Component) error {
 }
 
 // Method used to get the ActionRow components which represent a discordgo.ActionsRow structure
-func (r *ActionRow) GetComponent() discordgo.ActionsRow {
+func (r *ActionRow) GetComponent() interface{} {
 	return discordgo.ActionsRow{
 		Components: r.components,
 	}

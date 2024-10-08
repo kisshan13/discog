@@ -15,7 +15,7 @@ func NewButton() *Button {
 }
 
 // Adds content to Button Component like id, label, url and disabled.
-func (b *Button) AddContent(id string, label string, url string, disabled bool) *Button {
+func (b *Button) SetContent(id string, label string, url string, disabled bool) *Button {
 	b.button.Label = label
 	b.button.URL = url
 	b.button.CustomID = id
@@ -25,7 +25,7 @@ func (b *Button) AddContent(id string, label string, url string, disabled bool) 
 }
 
 // Adds style to the Button Component
-func (b *Button) AddStyle(style discordgo.ButtonStyle) *Button {
+func (b *Button) SetStyle(style discordgo.ButtonStyle) *Button {
 	b.button.Style = style
 
 	return b

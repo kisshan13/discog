@@ -1,6 +1,8 @@
 package moderations
 
 import (
+	"log"
+
 	"github.com/bwmarrin/discordgo"
 	discog "github.com/kisshan13/discog/package"
 )
@@ -15,36 +17,30 @@ func GetKickCommand() *discog.SlashCommand {
 
 		actionRow := discog.NewActionRow()
 
-		button := discog.NewButton().AddContent("", "Hello", "https://discord.gg", false).AddStyle(discordgo.LinkButton)
+		emailInput := discog.NewTextInput("email-id").SetLabel("Email").SetPlaceholder("kisshan@outlook.com").SetStyle(discordgo.TextInputShort)
 
-		// selectMenu := discog.NewSelectMenu(discordgo.StringSelectMenu)
-		// selectMenu.PlaceHolder("Add information here...")
-		// selectMenu.AddID("id")
-		// selectMenu.AddOptions([]discog.SelectMenuOption{
-		// 	*discog.NewSelectMenuOption("Hello", "why", "This is a optional"),
-		// 	*discog.NewSelectMenuOption("Hii", "hui", "This is a optional"),
-		// })
+		errorr := actionRow.AddComponent(emailInput)
 
-		// err := actionRow.AddComponent(selectMenu)
-		err := actionRow.AddComponent(button)
+		if errorr != nil {
+			log.Println(errorr.Error())
+		}
+
+		ctx.SetContent("I can't kick you have to add functionality first")
+		_, err := ctx.SetComponents([]discog.Component{actionRow})
 
 		if err != nil {
 			println(err.Error())
 		}
 
-		ctx.Content("I can't kick you have to add functionality first")
-		_, err = ctx.SetComponents(actionRow.GetComponent())
-
-		if err != nil {
-			println(err.Error())
-		}
+		ctx.SetTitle("Submit the data ")
+		ctx.SetCustomID("this-is-a-custom-id")
+		ctx.SetResponseType(discordgo.InteractionResponseModal)
 
 		err = ctx.Send()
 
 		if err != nil {
 			println(err.Error())
 		}
-
 	})
 
 	return command
