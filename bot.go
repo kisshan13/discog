@@ -57,13 +57,13 @@ func (b *Bot) OnReady(callback func(r *discordgo.Ready)) {
 	if len(b.CommandManager.groups) != 0 {
 		b.Session.AddHandler(func(s *discordgo.Session, i *discordgo.InteractionCreate) {
 
-			if i.Interaction.Type == discordgo.InteractionModalSubmit {
+			if i.Interaction.Type == discordgo.InteractionModalSubmit && b.CommandManager.modalHandler != nil {
 				ctx := newCtx(s, i)
 				b.CommandManager.modalHandler(ctx)
 				return
 			}
 
-			if i.Interaction.Type == discordgo.InteractionMessageComponent {
+			if i.Interaction.Type == discordgo.InteractionMessageComponent && b.CommandManager.messageComponentHandler != nil {
 				ctx := newCtx(s, i)
 				b.CommandManager.messageComponentHandler(ctx)
 				return
