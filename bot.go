@@ -50,7 +50,6 @@ func (b *Bot) Run(callback func(session *discordgo.Session, err error)) {
 // OnReady is a callback function that is called when the bot is ready. It logs the bot's status and registers the interaction handlers.
 func (b *Bot) OnReady(callback func(r *discordgo.Ready)) {
 	b.Session.AddHandler(func(s *discordgo.Session, r *discordgo.Ready) {
-		log.Printf("Ready! %+v\n", r)
 		callback(r)
 	})
 

@@ -14,13 +14,27 @@ func NewButton() *Button {
 	}
 }
 
-// Adds content to Button Component like id, label, url and disabled.
-func (b *Button) SetContent(id string, label string, url string, disabled bool) *Button {
+// Adds label to Button.
+func (b *Button) SetLabel(label string) *Button {
 	b.button.Label = label
-	b.button.URL = url
-	b.button.CustomID = id
-	b.button.Disabled = disabled
+	return b
+}
 
+// Disabled the button.
+func (b *Button) SetDisabled() *Button {
+	b.button.Disabled = true
+	return b
+}
+
+// Sets ID for the button.
+func (b *Button) SetID(id string) *Button {
+	b.button.CustomID = id
+	return b
+}
+
+// Sets URL for the button.
+func (b *Button) SetURL(url string) *Button {
+	b.button.URL = url
 	return b
 }
 
